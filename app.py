@@ -67,3 +67,8 @@ st.dataframe(filtered_data)
 rush_fig, pass_fig = plot_yardage_histograms(rush_plays, pass_plays)
 st.plotly_chart(rush_fig)
 st.plotly_chart(pass_fig)
+
+st.write(
+'''
+Passing plays on average tend to gain more yards than rush plays. 
+''')
