@@ -43,3 +43,13 @@ def calculate_rmse(model, data):
     predicted_ratings = predicted_ratings.flatten()
     # Calculate RMSE
     return np.sqrt(mean_squared_error(actual_ratings, predicted_ratings))
+
+def predict_ratings(model):
+    # Get the user and item factors
+    user_factors = model.user_factors
+    item_factors = model.item_factors
+
+    # Calculate the predicted ratings matrix
+    ratings_pred = np.dot(user_factors, item_factors.T)
+
+    return ratings_pred
