@@ -15,12 +15,8 @@ dependencies:
     - numpy
     - scikit-learn
     - category_encoders
-    - lightgbm
     - torch
-    - theano
     - arviz
     - implicit
     - spicy
-    - ipywidgets
-    - warnings
 
