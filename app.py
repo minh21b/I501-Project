@@ -1,11 +1,20 @@
 import os
 import pickle
-
-import streamlit as st
-from dotenv import load_dotenv
-
 from utils.b2 import B2
 from utils.modeling import *
+import streamlit as st
+from dotenv import load_dotenv
+import numpy as np
+from implicit.als import AlternatingLeastSquares
+from sklearn.metrics import mean_squared_error
+from scipy.sparse import coo_matrix
+import category_encoders as ce
+import pandas as pd
+import pymc as pm
+from sklearn.metrics import accuracy_score, f1_score, confusion_matrix, balanced_accuracy_score
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestRegressor
 
 # ------------------------------------------------------
 #                      APP CONSTANTS
