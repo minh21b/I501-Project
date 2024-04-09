@@ -22,4 +22,5 @@ dependencies:
     - implicit
     - spicy
     - ipywidgets
+    - warnings
 

@@ -14,6 +14,8 @@ from sklearn.metrics import accuracy_score, f1_score, confusion_matrix, balanced
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import RandomForestRegressor
+import warnings
+warnings.filterwarnings('ignore', category=SettingWithCopyWarning)
 
 # ------------------------------------------------------
 #                      APP CONSTANTS
@@ -82,6 +84,7 @@ best_rush_plays = rush_data.sort_values(by='Predicted Yards', ascending=False)
 pass_data.loc[:, 'Predicted Yards'] = pass_regressor.predict(X_pass)
 best_pass_plays = pass_data.sort_values(by='Predicted Yards', ascending=False)
 
+@st.cache_data
 def getPlay(team, down, distance, yardline):
     teamId = data.loc[data['OffenseTeam'] == team, 'TeamID'].values[0]
     SitId = yardline + 100 * distance + 10000 * down + 100000 * teamId
@@ -104,7 +107,7 @@ def getPlay(team, down, distance, yardline):
 
 st.write(
 '''
-**Your filtered data (only plays resulted in a non incompletion for simplicity purposes):**
+**Sample Demo of the recommender system:**
 ''')
 
 # Streamlit app
