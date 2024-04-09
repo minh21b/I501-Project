@@ -17,8 +17,15 @@ dependencies:
     - category_encoders
     - lightgbm
     - torch
-    - pymc3
     - theano
     - arviz
     - implicit
     - spicy
+    - rpy2
+    - pymc
+    - theano
+    - ipywidgets
+    - pyspark
+    - lightfm
+    - surprise
+
