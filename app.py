@@ -77,9 +77,9 @@ pass_regressor.fit(X_pass, y_pass)
 rush_regressor = RandomForestRegressor(n_estimators=100, random_state=42)
 rush_regressor.fit(X_rush, y_rush)
 
-rush_data['Predicted Yards'] = rush_regressor.predict(X_rush)
+rush_data.loc[:, 'Predicted Yards'] = ush_regressor.predict(X_rush)
 best_rush_plays = rush_data.sort_values(by='Predicted Yards', ascending=False)
-pass_data['Predicted Yards'] = pass_regressor.predict(X_pass)
+pass_data.loc[:, 'Predicted Yards'] = pass_regressor.predict(X_pass)
 best_pass_plays = pass_data.sort_values(by='Predicted Yards', ascending=False)
 
 def getPlay(team, down, distance, yardline):
