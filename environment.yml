@@ -21,11 +21,5 @@ dependencies:
     - arviz
     - implicit
     - spicy
-    - rpy2
-    - pymc
-    - theano
     - ipywidgets
-    - pyspark
-    - lightfm
-    - surprise
 
