@@ -105,8 +105,13 @@ def getPlay(team, down, distance, yardline):
         st.write('Second Pass Choice: ', best_passes.iloc[1]['PassType'])
         st.write('Predicted Gain: ', round(float(best_passes.iloc[1]['Predicted Yards'])))
     
-    else:
-        best_passes = 
+    # else:
+    #     best_passes = best_pass_plays[best_pass_plays['SitID'] == SitId]
+    #     best_passes = best_passes.nlargest(2, 'Predicted Yards')
+    #     st.write('First Pass Choice: ', best_passes.iloc[0]['PassType'])
+    #     st.write('Predicted Gain: ', round(float(best_passes.iloc[0]['Predicted Yards'])))
+    #     st.write('Second Pass Choice: ', best_passes.iloc[1]['PassType'])
+    #     st.write('Predicted Gain: ', round(float(best_passes.iloc[1]['Predicted Yards'])))
 
     if SitId in best_rush_plays['SitID'].values:
         best_rushes = best_rush_plays[best_rush_plays['SitID'] == SitId]
