@@ -138,16 +138,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-teamId = data.loc[data['OffenseTeam'] == team, 'TeamID'].values[0]
-    SitId = yardline + 100 * distance + 10000 * down + 100000 * teamId
-    if SitId in best_pass_plays['SitID'].values:
-        best_passes = best_pass_plays[best_pass_plays['SitID'] == SitId]
-        best_passes = best_passes.nlargest(2, 'Predicted Yards')
-        st.write('First Pass Choice: ', best_passes.iloc[0]['PassType'])
-        st.write('Predicted Gain: ', round(float(best_passes.iloc[0]['Predicted Yards'])))
-        st.write('Second Pass Choice: ', best_passes.iloc[1]['PassType'])
-        st.write('Predicted Gain: ', round(float(best_passes.iloc[1]['Predicted Yards'])))
-
-finish this chunk of code by finishing the else statement
-using teamID, find the team's average yardage gain and recommend 2 plays based on the average
