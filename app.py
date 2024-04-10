@@ -60,50 +60,61 @@ data = get_data()
 # ------------------------------
 # PART 1 : Filter Data
 # ------------------------------
-rush_data = data[data['IsRush'] == 1]
-pass_data = data[data['IsPass'] == 1]
+@st.cache_data
+def prep_data(data):
+    rush_data = data[data['IsRush'] == 1]
+    pass_data = data[data['IsPass'] == 1]
+    # Train pass play model
+    X_pass = pass_data[['SitID', 'PlayID']]
+    y_pass = pass_data['Yards']
+    # Train rush play model
+    X_rush = rush_data[['SitID', 'PlayID']]
+    y_rush = rush_data['Yards']
+    return X_pass, y_pass, X_rush, y_rush, rush_data, pass_data
 
+X_pass, y_pass, X_rush, y_rush, rush_data, pass_data = prep_data(data)
 # ------------------------------
 # PART 2 : Modeling
 # ------------------------------
+@st.cache_data
+def get_model(X_pass, y_pass, X_rush, y_rush, rush_data, pass_data):
+    pass_regressor = RandomForestRegressor(n_estimators=100, random_state=42)
+    pass_regressor.fit(X_pass, y_pass)
+    rush_regressor = RandomForestRegressor(n_estimators=100, random_state=42)
+    rush_regressor.fit(X_rush, y_rush)
+    rush_data.loc[:, 'Predicted Yards'] = rush_regressor.predict(X_rush)
+    best_rush_plays = rush_data.sort_values(by='Predicted Yards', ascending=False)
+    pass_data.loc[:, 'Predicted Yards'] = pass_regressor.predict(X_pass)
+    best_pass_plays = pass_data.sort_values(by='Predicted Yards', ascending=False)
+    return best_rush_plays, best_pass_plays
 
-# Train pass play model
-X_pass = pass_data[['SitID', 'PlayID']]
-y_pass = pass_data['Yards']
-# Train rush play model
-X_rush = rush_data[['SitID', 'PlayID']]
-y_rush = rush_data['Yards']
+best_rush_plays, best_pass_plays = get_model(X_pass, y_pass, X_rush, y_rush, rush_data, pass_data)
 
-pass_regressor = RandomForestRegressor(n_estimators=100, random_state=42)
-pass_regressor.fit(X_pass, y_pass)
-rush_regressor = RandomForestRegressor(n_estimators=100, random_state=42)
-rush_regressor.fit(X_rush, y_rush)
-
-rush_data.loc[:, 'Predicted Yards'] = rush_regressor.predict(X_rush)
-best_rush_plays = rush_data.sort_values(by='Predicted Yards', ascending=False)
-pass_data.loc[:, 'Predicted Yards'] = pass_regressor.predict(X_pass)
-best_pass_plays = pass_data.sort_values(by='Predicted Yards', ascending=False)
-
+# ------------------------------
+# PART 2 : Building the recommender system
+# ------------------------------
 @st.cache_data
 def getPlay(team, down, distance, yardline):
     teamId = data.loc[data['OffenseTeam'] == team, 'TeamID'].values[0]
     SitId = yardline + 100 * distance + 10000 * down + 100000 * teamId
-    SitId = 1711083
     if SitId in best_pass_plays['SitID'].values:
         best_passes = best_pass_plays[best_pass_plays['SitID'] == SitId]
         best_passes = best_passes.nlargest(2, 'Predicted Yards')
-        print('First Pass Choice: ', best_passes.iloc[0]['PassType'])
-        print('Predicted Gain: ', round(float(best_passes.iloc[0]['Predicted Yards'])))
-        print('Second Pass Choice: ', best_passes.iloc[1]['PassType'])
-        print('Predicted Gain: ', round(float(best_passes.iloc[1]['Predicted Yards'])))
+        st.write('First Pass Choice: ', best_passes.iloc[0]['PassType'])
+        st.write('Predicted Gain: ', round(float(best_passes.iloc[0]['Predicted Yards'])))
+        st.write('Second Pass Choice: ', best_passes.iloc[1]['PassType'])
+        st.write('Predicted Gain: ', round(float(best_passes.iloc[1]['Predicted Yards'])))
+    
+    else:
+        best_passes = 
 
     if SitId in best_rush_plays['SitID'].values:
         best_rushes = best_rush_plays[best_rush_plays['SitID'] == SitId]
         best_rushes = best_rushes.nlargest(2, 'Predicted Yards')
-        print('First Rush Choice: ', best_rushes.iloc[0]['RushDirection'])
-        print('Predicted Gain: ', round(float(best_rushes.iloc[0]['Predicted Yards'])))
-        print('Second Rush Choice: ', best_rushes.iloc[1]['RushDirection'])
-        print('Predicted Gain: ', round(float(best_rushes.iloc[1]['Predicted Yards'])))
+        st.write('First Rush Choice: ', best_rushes.iloc[0]['RushDirection'])
+        st.write('Predicted Gain: ', round(float(best_rushes.iloc[0]['Predicted Yards'])))
+        st.write('Second Rush Choice: ', best_rushes.iloc[1]['RushDirection'])
+        st.write('Predicted Gain: ', round(float(best_rushes.iloc[1]['Predicted Yards'])))
 
 st.write(
 '''
@@ -124,9 +135,19 @@ def main():
     if st.button("Start"):
         # Call the getPlay function with the input parameters
         result = getPlay(team, down, distance, yardline)
-        st.write("Output:")
-        st.write(result)
 
 if __name__ == "__main__":
     main()
 
+teamId = data.loc[data['OffenseTeam'] == team, 'TeamID'].values[0]
+    SitId = yardline + 100 * distance + 10000 * down + 100000 * teamId
+    if SitId in best_pass_plays['SitID'].values:
+        best_passes = best_pass_plays[best_pass_plays['SitID'] == SitId]
+        best_passes = best_passes.nlargest(2, 'Predicted Yards')
+        st.write('First Pass Choice: ', best_passes.iloc[0]['PassType'])
+        st.write('Predicted Gain: ', round(float(best_passes.iloc[0]['Predicted Yards'])))
+        st.write('Second Pass Choice: ', best_passes.iloc[1]['PassType'])
+        st.write('Predicted Gain: ', round(float(best_passes.iloc[1]['Predicted Yards'])))
+
+finish this chunk of code by finishing the else statement
+using teamID, find the team's average yardage gain and recommend 2 plays based on the average
