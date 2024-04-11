@@ -53,7 +53,7 @@ st.write(
 '''
 # Data Overview and Visualization
 We pull data from our Backblaze storage bucket, and render it in Streamlit.
-A quantitative question of the data I plan to use in my final project is whether pass plays on average gain more yardage or rush plays.
+Below is a demo of the recommender system and a list of any problems and future directions.
 '''
 )
 data = get_data()
@@ -105,13 +105,15 @@ def getPlay(team, down, distance, yardline):
         st.write('Second Pass Choice: ', best_passes.iloc[1]['PassType'])
         st.write('Predicted Gain: ', round(float(best_passes.iloc[1]['Predicted Yards'])))
     
-    # else:
-    #     best_passes = best_pass_plays[best_pass_plays['SitID'] == SitId]
-    #     best_passes = best_passes.nlargest(2, 'Predicted Yards')
-    #     st.write('First Pass Choice: ', best_passes.iloc[0]['PassType'])
-    #     st.write('Predicted Gain: ', round(float(best_passes.iloc[0]['Predicted Yards'])))
-    #     st.write('Second Pass Choice: ', best_passes.iloc[1]['PassType'])
-    #     st.write('Predicted Gain: ', round(float(best_passes.iloc[1]['Predicted Yards'])))
+    else:
+        best_passes = best_pass_plays[best_pass_plays['TeamID'] == teamId]
+        average_yards = best_passes['Yards'].mean()
+        # Select two plays nearest to the average
+        nearest_plays = best_pass_plays.iloc[(best_pass_plays['Predicted Yards'] - average_yards).abs().argsort()[:2]]
+        st.write('First Pass Choice: ', nearest_plays.iloc[0]['PassType'])
+        st.write('Predicted Gain: ', round(float(nearest_plays.iloc[0]['Predicted Yards'])))
+        st.write('Second Pass Choice: ', nearest_plays.iloc[1]['PassType'])
+        st.write('Predicted Gain: ', round(float(nearest_plays.iloc[1]['Predicted Yards'])))
 
     if SitId in best_rush_plays['SitID'].values:
         best_rushes = best_rush_plays[best_rush_plays['SitID'] == SitId]
@@ -120,6 +122,16 @@ def getPlay(team, down, distance, yardline):
         st.write('Predicted Gain: ', round(float(best_rushes.iloc[0]['Predicted Yards'])))
         st.write('Second Rush Choice: ', best_rushes.iloc[1]['RushDirection'])
         st.write('Predicted Gain: ', round(float(best_rushes.iloc[1]['Predicted Yards'])))
+
+    else:
+        best_rushes = best_rush_plays[best_rush_plays['TeamID'] == teamId]
+        average_yards = best_rushes['Yards'].mean()
+        # Select two plays nearest to the average
+        nearest_plays = best_rush_plays.iloc[(best_rush_plays['Predicted Yards'] - average_yards).abs().argsort()[:2]]
+        st.write('First Pass Choice: ', nearest_plays.iloc[0]['RushDirection'])
+        st.write('Predicted Gain: ', round(float(nearest_plays.iloc[0]['Predicted Yards'])))
+        st.write('Second Pass Choice: ', nearest_plays.iloc[1]['RushDirection'])
+        st.write('Predicted Gain: ', round(float(nearest_plays.iloc[1]['Predicted Yards'])))
 
 st.write(
 '''
@@ -139,7 +151,18 @@ def main():
     # Start button to execute the getPlay function
     if st.button("Start"):
         # Call the getPlay function with the input parameters
-        result = getPlay(team, down, distance, yardline)
+        getPlay(team, down, distance, yardline)
 
 if __name__ == "__main__":
     main()
+    st.write(
+    '''
+    ----------------------------
+    **Issues I've ran into:** \n
+    So far there isn't too many issues I've ran to, most of them have to deal with the modeling part of the project where some models aren't
+    producing the results I expected or some models that I unfortunately cannot attempt to use due to technical difficulties with the environment
+    and I couldn't figure them out. \n
+    ----------------------------
+    **Next steps:** \n
+    I'd say this is pretty much complete in terms of building the model and stuff. All I have left is to actually make an app (decorating the web page, etc)
+    ''')
