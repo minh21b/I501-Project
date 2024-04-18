@@ -143,10 +143,10 @@ def main():
     st.title("Football Play Recommender")
     
     # Input fields for the parameters
-    team = st.text_input("Team")
+    team = st.selectbox("Team", data['OffenseTeam'].dropna().unique())
     down = st.number_input("Down", min_value=1, max_value=4, value=1, step=1)
     distance = st.number_input("Distance", min_value=1, value=5, step=1)
-    yardline = st.number_input("Yardline", min_value=1, value=95, step=1)
+    yardline = st.number_input("Yardline", min_value=1, value=20, step=1)
     
     # Start button to execute the getPlay function
     if st.button("Start"):
