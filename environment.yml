@@ -8,15 +8,14 @@ dependencies:
     - streamlit
     - boto3
     - ipykernel
-    - vaderSentiment
+    #- vaderSentiment
     - plotly==5.19.0
     - scikit-learn
-    - seaborn
-    - numpy
+    #- seaborn
     - scikit-learn
-    - category_encoders
+    #- category_encoders
     - torch
-    - arviz
-    - implicit
+    #- arviz
+    #- implicit
     - spicy
 
