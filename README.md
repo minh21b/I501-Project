@@ -1,4 +1,5 @@
 # Project Title: Football Recommender System
+[Link to the web app](https://i501-project.streamlit.app/)
 
 ## Abstract
 The National Football League (NFL) is a dynamic and complex sports environment
