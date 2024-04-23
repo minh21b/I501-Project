@@ -185,14 +185,14 @@ def main():
 
 if __name__ == "__main__":
     main()
-    st.write(
-    '''
-    ----------------------------
-    **Issues I've ran into:** \n
-    So far there isn't too many issues I've ran to, most of them have to deal with the modeling part of the project where some models aren't
-    producing the results I expected or some models that I unfortunately cannot attempt to use due to technical difficulties with the environment
-    and I couldn't figure them out. \n
-    ----------------------------
-    **Next steps:** \n
-    I'd say this is pretty much complete in terms of building the model and stuff. All I have left is to actually make an app (decorating the web page, etc)
-    ''')
+    # st.write(
+    # '''
+    # ----------------------------
+    # **Issues I've ran into:** \n
+    # So far there isn't too many issues I've ran to, most of them have to deal with the modeling part of the project where some models aren't
+    # producing the results I expected or some models that I unfortunately cannot attempt to use due to technical difficulties with the environment
+    # and I couldn't figure them out. \n
+    # ----------------------------
+    # **Next steps:** \n
+    # I'd say this is pretty much complete in terms of building the model and stuff. All I have left is to actually make an app (decorating the web page, etc)
+    # ''')
