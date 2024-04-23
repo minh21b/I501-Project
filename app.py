@@ -40,13 +40,6 @@ def get_data():
 # ------------------------------
 # PART 0 : Overview
 # ------------------------------
-st.write(
-'''
-# Data Overview and Visualization
-We pull data from our Backblaze storage bucket, and render it in Streamlit.
-Below is a demo of the recommender system and a list of any problems and future directions.
-'''
-)
 data = get_data()
 # ------------------------------
 # PART 1 : Filter Data
@@ -143,7 +136,7 @@ def main():
 
     st.write(
     """
-    # Welcome to the Football Play Recommender!
+    ## Welcome to the Football Play Recommender!
     
     This app is designed to help you find the best offensive plays for your team based on various game situations.
     Whether you're a coach, a player, or just a fan curious about football strategy, this tool can provide valuable
