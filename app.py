@@ -90,7 +90,11 @@ def getPlay(team, down, distance, yardline):
     SitId = yardline + 100 * distance + 10000 * down + 100000 * teamId
     if SitId in best_pass_plays['SitID'].values:
         best_passes = best_pass_plays[best_pass_plays['SitID'] == SitId]
+        average_yards = best_passes['Yards'].mean()
+        nearest_plays = best_pass_plays.iloc[(best_pass_plays['Predicted Yards'] - average_yards).abs().argsort()[:2]]
         best_passes = best_passes.nlargest(2, 'Predicted Yards')
+        #sometimes the model doesn't recommend 2 plays, doing it this way ensures there's always at least 2 available plays
+        best_passes = pd.concat([best_passes, nearest_plays])
         st.write('First Pass Choice: ', best_passes.iloc[0]['PassType'])
         st.write('Predicted Gain: ', round(float(best_passes.iloc[0]['Predicted Yards'])))
         st.write('Second Pass Choice: ', best_passes.iloc[1]['PassType'])
@@ -108,7 +112,11 @@ def getPlay(team, down, distance, yardline):
 
     if SitId in best_rush_plays['SitID'].values:
         best_rushes = best_rush_plays[best_rush_plays['SitID'] == SitId]
+        average_yards = best_rushes['Yards'].mean()
         best_rushes = best_rushes.nlargest(2, 'Predicted Yards')
+        nearest_plays = best_rush_plays.iloc[(best_rush_plays['Predicted Yards'] - average_yards).abs().argsort()[:2]]
+        #sometimes the model doesn't recommend 2 plays, doing it this way ensures there's always at least 2 available plays
+        best_rushes = pd.concat([best_rushes, nearest_plays])
         st.write('First Rush Choice: ', best_rushes.iloc[0]['RushDirection'])
         st.write('Predicted Gain: ', round(float(best_rushes.iloc[0]['Predicted Yards'])))
         st.write('Second Rush Choice: ', best_rushes.iloc[1]['RushDirection'])
@@ -132,12 +140,43 @@ st.write(
 # Streamlit app
 def main():
     st.title("Football Play Recommender")
+
+    st.write(
+    """
+    # Welcome to the Football Play Recommender!
+    
+    This app is designed to help you find the best offensive plays for your team based on various game situations.
+    Whether you're a coach, a player, or just a fan curious about football strategy, this tool can provide valuable
+    insights into play selection.
+    """
+    )
+    # Instructions
+    st.write(
+        """
+        ## How to Use
+        
+        1. **Select Your Team**: Choose your team from the dropdown list. This represents the team on offense.
+    
+        2. **Enter Game Situation**: 
+        - **Down**: Choose the current down from 1 to 4.
+        - **Distance**: Enter the distance needed to gain a new set of downs. This is typically measured in yards.
+        - **Yardline**: Enter the yardline where the ball is currently placed. This is the distance from the opponent's end zone, measured in yards.
+
+        3. **Click Start**: After entering the game situation, click the "Start" button to see the recommended plays.
+
+        4. **Review Recommendations**: The app will display the top two recommended passing and rushing plays based on the provided game situation. For passing plays, it will show the type of pass and the predicted gain in yards. For rushing plays, it will show the direction of the run and the predicted gain in yards.
+
+        5. **Adjust and Try Again**: If you want to explore different scenarios, simply adjust the game situation parameters and click "Start" again to see new recommendations.
+        
+        Enjoy using the Football Play Recommender to optimize your team's offensive strategy and gain an edge on the field!
+        """
+    )
     
     # Input fields for the parameters
     team = st.selectbox("Team", data['OffenseTeam'].dropna().unique())
     down = st.number_input("Down", min_value=1, max_value=4, value=1, step=1)
-    distance = st.number_input("Distance", min_value=1, value=5, step=1)
-    yardline = st.number_input("Yardline", min_value=1, value=20, step=1)
+    distance = st.number_input("Distance", min_value=1, value=10, step=1, max_value = 99)
+    yardline = st.number_input("Yardline", min_value=1, value=25, step=1, max_value = 99)
     
     # Start button to execute the getPlay function
     if st.button("Start"):
