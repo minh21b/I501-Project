@@ -126,10 +126,6 @@ def getPlay(team, down, distance, yardline):
         st.write('Second Pass Choice: ', nearest_plays.iloc[1]['RushDirection'])
         st.write('Predicted Gain: ', round(float(nearest_plays.iloc[1]['Predicted Yards'])))
 
-st.write(
-'''
-**Sample Demo of the recommender system:**
-''')
 
 # Streamlit app
 def main():
@@ -137,7 +133,6 @@ def main():
 
     st.write(
     """
-    ## Welcome to the Football Play Recommender!
     
     This app is designed to help you find the best offensive plays for your team based on various game situations.
     Whether you're a coach, a player, or just a fan curious about football strategy, this tool can provide valuable
