@@ -5,6 +5,7 @@ from utils.b2 import B2
 import streamlit as st
 from dotenv import load_dotenv
 from sklearn.ensemble import RandomForestRegressor
+import pandas as pd
 # import warnings
 # warnings.filterwarnings('ignore', category=SettingWithCopyWarning)
 
